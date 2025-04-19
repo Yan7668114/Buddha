@@ -219,6 +219,32 @@
             transform: translateY(-3px);
         }
         
+        /* 回到頂部按鈕的樣式 */
+        #backToTopBtn {
+            display: none; /* 初始隱藏按鈕 */
+            position: fixed; /* 固定位置 */
+            bottom: 20px; /* 距離底部20像素 */
+            right: 30px; /* 距離右側30像素 */
+            z-index: 99; /* 確保按鈕在其他元素上面 */
+            border: none; /* 移除邊框 */
+            outline: none; /* 移除焦點輪廓 */
+            background-color: var(--primary-color, #8a6d3b); /* 使用網站主色調 */
+            color: white; /* 白色文字 */
+            cursor: pointer; /* 滑鼠指針變為手形 */
+            padding: 15px; /* 內部填充 */
+            border-radius: 50%; /* 圓形按鈕 */
+            font-size: 18px; /* 文字大小 */
+            width: 50px; /* 按鈕寬度 */
+            height: 50px; /* 按鈕高度 */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* 陰影效果 */
+            transition: all 0.3s ease; /* 平滑過渡效果 */
+        }
+
+#backToTopBtn:hover {
+  background-color: var(--accent-color, #d4af37); /* 懸停時的背景色 */
+  transform: translateY(-3px); /* 懸停時輕微上浮效果 */
+}
+
         @media (max-width: 768px) {
             .scripture-layout {
                 grid-template-columns: 1fr;
@@ -6507,7 +6533,32 @@
         </div>
     </footer>
     
+    <button id="backToTopBtn" title="回到頂部">↑</button>
+
     <script>
+        // 回到頂部功能
+document.addEventListener('DOMContentLoaded', function() {
+    // 獲取按鈕元素
+    const backToTopButton = document.getElementById('backToTopBtn');
+
+    // 當用戶滾動超過200像素時顯示按鈕
+    window.onscroll = function() {
+        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+            backToTopButton.style.display = 'block';
+        } else {
+            backToTopButton.style.display = 'none';
+        }
+    };
+
+    // 點擊按鈕時滾動到頂部
+    backToTopButton.addEventListener('click', function() {
+        // 平滑滾動到頂部
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+});
         // 處理經文切換
         const scriptureLinks = document.querySelectorAll('.scripture-link');
         const scriptureDisplays = document.querySelectorAll('.scripture-display');

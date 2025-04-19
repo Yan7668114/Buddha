@@ -315,6 +315,32 @@
             font-size: 0.9rem;
         }
         
+        /* 回到頂部按鈕樣式 */
+        #backToTopBtn {
+            display: none; /* 初始狀態為隱藏 */
+            position: fixed; /* 固定位置 */
+            bottom: 30px; /* 距離底部的距離 */
+            right: 30px; /* 距離右側的距離 */
+            z-index: 99; /* 確保按鈕在其他元素上方 */
+            width: 50px; /* 按鈕寬度 */
+            height: 50px; /* 按鈕高度 */
+            background-color: var(--accent-color); /* 使用網站已定義的強調色 */
+            color: var(--text-color); /* 使用網站已定義的文字顏色 */
+            border: none; /* 移除邊框 */
+            border-radius: 50%; /* 圓形按鈕 */
+            font-size: 20px; /* 箭頭大小 */
+            cursor: pointer; /* 滑鼠指針形狀 */
+            outline: none; /* 移除輪廓 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* 添加陰影效果 */
+            transition: all 0.3s ease; /* 平滑過渡效果 */
+        }
+
+        #backToTopBtn:hover {
+            background-color: var(--primary-color); /* 懸停時背景變為主要顏色 */
+            color: var(--light-text); /* 懸停時文字顏色變為淺色 */
+            transform: translateY(-5px); /* 懸停時向上浮動效果 */
+        }
+        
         @media (max-width: 768px) {
             .logo h1 {
                 font-size: 2.5rem;
@@ -326,6 +352,14 @@
             
             .quote {
                 font-size: 1.5rem;
+            }
+            
+            #backToTopBtn {
+                width: 40px; /* 在小屏幕上縮小按鈕 */
+                height: 40px;
+                font-size: 16px;
+                bottom: 20px;
+                right: 20px;
             }
         }
     </style>
@@ -405,8 +439,11 @@
         </div>
     </footer>
     
+    <!-- 回到頂部按鈕 -->
+    <button id="backToTopBtn" title="回到頂部">↑</button>
+    
     <script>
-        // Smooth scrolling for navigation
+        // 平滑滾動功能
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -420,6 +457,31 @@
                         behavior: 'smooth'
                     });
                 }
+            });
+        });
+        
+        // 回到頂部按鈕功能
+        document.addEventListener('DOMContentLoaded', function() {
+            // 創建按鈕引用
+            const backToTopButton = document.getElementById('backToTopBtn');
+            
+            // 監聽滾動事件
+            window.addEventListener('scroll', function() {
+                // 當頁面滾動超過300像素時顯示按鈕
+                if (window.scrollY > 300) {
+                    backToTopButton.style.display = 'block';
+                } else {
+                    backToTopButton.style.display = 'none';
+                }
+            });
+            
+            // 點擊按鈕時滾動到頂部
+            backToTopButton.addEventListener('click', function() {
+                // 使用平滑滾動效果
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
             });
         });
     </script>
