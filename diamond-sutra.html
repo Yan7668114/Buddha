@@ -240,10 +240,10 @@
             transition: all 0.3s ease; /* 平滑過渡效果 */
         }
 
-#backToTopBtn:hover {
-  background-color: var(--accent-color, #d4af37); /* 懸停時的背景色 */
-  transform: translateY(-3px); /* 懸停時輕微上浮效果 */
-}
+        #backToTopBtn:hover {
+            background-color: var(--accent-color, #d4af37); /* 懸停時的背景色 */
+            transform: translateY(-3px); /* 懸停時輕微上浮效果 */
+        }
 
         @media (max-width: 768px) {
             .scripture-layout {
@@ -6543,7 +6543,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 當用戶滾動超過200像素時顯示按鈕
     window.onscroll = function() {
-        if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 200) {
             backToTopButton.style.display = 'block';
         } else {
             backToTopButton.style.display = 'none';
