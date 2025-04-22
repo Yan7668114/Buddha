@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>共修 - 虛空學佛網</title>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    
     <style>
         :root {
             --primary-color: #8a6d3b;
@@ -355,6 +359,23 @@
             background-color: var(--accent-color, #d4af37); /* 懸停時的背景色 */
             transform: translateY(-3px); /* 懸停時輕微上浮效果 */
         }
+        
+        /* 載入中動畫 */
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 5px solid var(--accent-color);
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+            display: none;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
 
         @media (max-width: 768px) {
             .scripture-layout {
@@ -441,6 +462,7 @@
                                 <input type="number" id="saha-count" min="1" placeholder="請輸入念誦次數" class="count-input">
                             </div>
                             <button class="submit-btn count-submit" data-panel="saha">送出</button>
+                            <div class="loader" id="saha-count-loader"></div>
                             <div class="stat-display">
                                 目前累積次數: <span class="total-count" id="saha-total-count">0</span> 遍
                             </div>
@@ -459,6 +481,7 @@
                                 <input type="number" id="saha-time" min="1" placeholder="請輸入念誦分鐘數" class="time-input">
                             </div>
                             <button class="submit-btn time-submit" data-panel="saha">送出</button>
+                            <div class="loader" id="saha-time-loader"></div>
                             <div class="stat-display">
                                 目前累積時間: <span class="total-time" id="saha-total-time">0</span> 分鐘
                             </div>
@@ -484,6 +507,7 @@
                                 <input type="number" id="hell-count" min="1" placeholder="請輸入念誦次數" class="count-input">
                             </div>
                             <button class="submit-btn count-submit" data-panel="hell">送出</button>
+                            <div class="loader" id="hell-count-loader"></div>
                             <div class="stat-display">
                                 目前累積次數: <span class="total-count" id="hell-total-count">0</span> 遍
                             </div>
@@ -502,6 +526,7 @@
                                 <input type="number" id="hell-time" min="1" placeholder="請輸入念誦分鐘數" class="time-input">
                             </div>
                             <button class="submit-btn time-submit" data-panel="hell">送出</button>
+                            <div class="loader" id="hell-time-loader"></div>
                             <div class="stat-display">
                                 目前累積時間: <span class="total-time" id="hell-total-time">0</span> 分鐘
                             </div>
@@ -527,6 +552,7 @@
                                 <input type="number" id="infants-count" min="1" placeholder="請輸入念誦次數" class="count-input">
                             </div>
                             <button class="submit-btn count-submit" data-panel="infants">送出</button>
+                            <div class="loader" id="infants-count-loader"></div>
                             <div class="stat-display">
                                 目前累積次數: <span class="total-count" id="infants-total-count">0</span> 遍
                             </div>
@@ -545,6 +571,7 @@
                                 <input type="number" id="infants-time" min="1" placeholder="請輸入念誦分鐘數" class="time-input">
                             </div>
                             <button class="submit-btn time-submit" data-panel="infants">送出</button>
+                            <div class="loader" id="infants-time-loader"></div>
                             <div class="stat-display">
                                 目前累積時間: <span class="total-time" id="infants-total-time">0</span> 分鐘
                             </div>
@@ -570,6 +597,7 @@
                                 <input type="number" id="marriage-count" min="1" placeholder="請輸入念誦次數" class="count-input">
                             </div>
                             <button class="submit-btn count-submit" data-panel="marriage">送出</button>
+                            <div class="loader" id="marriage-count-loader"></div>
                             <div class="stat-display">
                                 目前累積次數: <span class="total-count" id="marriage-total-count">0</span> 遍
                             </div>
@@ -588,6 +616,7 @@
                                 <input type="number" id="marriage-time" min="1" placeholder="請輸入念誦分鐘數" class="time-input">
                             </div>
                             <button class="submit-btn time-submit" data-panel="marriage">送出</button>
+                            <div class="loader" id="marriage-time-loader"></div>
                             <div class="stat-display">
                                 目前累積時間: <span class="total-time" id="marriage-total-time">0</span> 分鐘
                             </div>
@@ -610,11 +639,24 @@
     <button id="backToTopBtn" title="回到頂部">↑</button>
 
     <script>
-        // 回到頂部功能
+        // 在這裡填入您的Firebase配置
+        const firebaseConfig = {
+            apiKey: "AIzaSyBQBI80AK9wSycT1NrmKbFO4EL4-mUsSs0",
+            authDomain: "buddha-83641.firebaseapp.com",
+            databaseURL: "https://buddha-83641-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "buddha-83641",
+            storageBucket: "buddha-83641.firebasestorage.app",
+            messagingSenderId: "1030848359695",
+            appId: "1:1030848359695:web:126ffab10c6259ff61627a"
+        };
+        
+        // 初始化Firebase
+        firebase.initializeApp(firebaseConfig);
+        
         document.addEventListener('DOMContentLoaded', function() {
-            // 獲取按鈕元素
+            // 獲取回到頂部按鈕元素
             const backToTopButton = document.getElementById('backToTopBtn');
-
+            
             // 當用戶滾動超過200像素時顯示按鈕
             window.onscroll = function() {
                 if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 200) {
@@ -623,10 +665,9 @@
                     backToTopButton.style.display = 'none';
                 }
             };
-
+            
             // 點擊按鈕時滾動到頂部
             backToTopButton.addEventListener('click', function() {
-                // 平滑滾動到頂部
                 window.scrollTo({
                     top: 0,
                     behavior: 'smooth'
@@ -654,22 +695,73 @@
                 });
             });
             
-            // 模擬數據儲存
-            // 實際應用中這些數據應該存儲在服務器上的數據庫中
-            const globalData = {
+            // 生成或獲取設備ID
+            let deviceId = localStorage.getItem('buddhaDeviceId');
+            if (!deviceId) {
+                deviceId = 'device_' + Math.random().toString(36).substring(2, 15);
+                localStorage.setItem('buddhaDeviceId', deviceId);
+            }
+            
+            // Firebase資料庫引用
+            const db = firebase.database();
+            const globalStatsRef = db.ref('共修網/global_stats');
+            
+            // 本地數據
+            let globalData = {
                 saha: { totalCount: 0, totalTime: 0 },
                 hell: { totalCount: 0, totalTime: 0 },
                 infants: { totalCount: 0, totalTime: 0 },
                 marriage: { totalCount: 0, totalTime: 0 }
             };
             
-            // 用戶個人數據
-            const userData = {
+            // 個人數據
+            let userData = {
                 saha: { count: 0, time: 0 },
                 hell: { count: 0, time: 0 },
                 infants: { count: 0, time: 0 },
                 marriage: { count: 0, time: 0 }
             };
+            
+            // 從localStorage讀取個人記錄
+            if (localStorage.getItem('buddhaUserData')) {
+                userData = JSON.parse(localStorage.getItem('buddhaUserData'));
+            }
+            
+            // 從Firebase讀取全球數據
+            globalStatsRef.on('value', (snapshot) => {
+                const data = snapshot.val();
+                if (data) {
+                    globalData = data;
+                    updateDisplayedCounts();
+                }
+            });
+            
+            // 更新畫面顯示
+            function updateDisplayedCounts() {
+                // 更新全球計數顯示
+                document.getElementById('saha-total-count').textContent = globalData.saha.totalCount || 0;
+                document.getElementById('hell-total-count').textContent = globalData.hell.totalCount || 0;
+                document.getElementById('infants-total-count').textContent = globalData.infants.totalCount || 0;
+                document.getElementById('marriage-total-count').textContent = globalData.marriage.totalCount || 0;
+                
+                // 更新全球時間顯示
+                document.getElementById('saha-total-time').textContent = globalData.saha.totalTime || 0;
+                document.getElementById('hell-total-time').textContent = globalData.hell.totalTime || 0;
+                document.getElementById('infants-total-time').textContent = globalData.infants.totalTime || 0;
+                document.getElementById('marriage-total-time').textContent = globalData.marriage.totalTime || 0;
+                
+                // 更新個人計數顯示
+                document.getElementById('saha-personal-count').textContent = userData.saha.count || 0;
+                document.getElementById('hell-personal-count').textContent = userData.hell.count || 0;
+                document.getElementById('infants-personal-count').textContent = userData.infants.count || 0;
+                document.getElementById('marriage-personal-count').textContent = userData.marriage.count || 0;
+                
+                // 更新個人時間顯示
+                document.getElementById('saha-personal-time').textContent = userData.saha.time || 0;
+                document.getElementById('hell-personal-time').textContent = userData.hell.time || 0;
+                document.getElementById('infants-personal-time').textContent = userData.infants.time || 0;
+                document.getElementById('marriage-personal-time').textContent = userData.marriage.time || 0;
+            }
             
             // 處理計數器提交
             const countSubmitBtns = document.querySelectorAll('.count-submit');
@@ -680,19 +772,49 @@
                     const count = parseInt(countInput.value) || 0;
                     
                     if (count > 0) {
-                        // 更新全局計數
-                        globalData[panel].totalCount += count;
-                        document.getElementById(`${panel}-total-count`).textContent = globalData[panel].totalCount;
+                        // 顯示載入中
+                        const loader = document.getElementById(`${panel}-count-loader`);
+                        loader.style.display = 'block';
                         
-                        // 更新用戶個人計數
-                        userData[panel].count = count;
-                        document.getElementById(`${panel}-personal-count`).textContent = userData[panel].count;
-                        
-                        // 清空輸入框
-                        countInput.value = '';
-                        
-                        // 顯示提交成功提示
-                        alert(`已成功記錄 ${count} 遍念誦！`);
+                        // 更新全球計數
+                        const panelRef = globalStatsRef.child(panel);
+                        panelRef.transaction((currentData) => {
+                            if (currentData === null) {
+                                return { totalCount: count, totalTime: 0 };
+                            } else {
+                                currentData.totalCount = (currentData.totalCount || 0) + count;
+                                return currentData;
+                            }
+                        }).then(() => {
+                            // 更新個人計數
+                            userData[panel].count = count;
+                            localStorage.setItem('buddhaUserData', JSON.stringify(userData));
+                            
+                            // 清空輸入框
+                            countInput.value = '';
+                            
+                            // 隱藏載入中
+                            loader.style.display = 'none';
+                            
+                            // 更新顯示
+                            updateDisplayedCounts();
+                            
+                            // 顯示提交成功提示
+                            alert(`已成功記錄 ${count} 遍念誦！`);
+                        }).catch(error => {
+                            console.error('提交失敗:', error);
+                            loader.style.display = 'none';
+                            alert('提交失敗，請稍後再試。若問題持續存在，請刷新頁面。');
+                            
+                            // 將失敗的數據添加到離線隊列
+                            let offlineQueue = JSON.parse(localStorage.getItem('buddhaOfflineQueue') || '[]');
+                            offlineQueue.push({
+                                panel: panel,
+                                type: 'count',
+                                value: count
+                            });
+                            localStorage.setItem('buddhaOfflineQueue', JSON.stringify(offlineQueue));
+                        });
                     } else {
                         alert('請輸入有效的念誦次數');
                     }
@@ -708,24 +830,107 @@
                     const time = parseInt(timeInput.value) || 0;
                     
                     if (time > 0) {
-                        // 更新全局時間
-                        globalData[panel].totalTime += time;
-                        document.getElementById(`${panel}-total-time`).textContent = globalData[panel].totalTime;
+                        // 顯示載入中
+                        const loader = document.getElementById(`${panel}-time-loader`);
+                        loader.style.display = 'block';
                         
-                        // 更新用戶個人時間
-                        userData[panel].time = time;
-                        document.getElementById(`${panel}-personal-time`).textContent = userData[panel].time;
-                        
-                        // 清空輸入框
-                        timeInput.value = '';
-                        
-                        // 顯示提交成功提示
-                        alert(`已成功記錄 ${time} 分鐘念誦時間！`);
+                        // 更新全球時間
+                        const panelRef = globalStatsRef.child(panel);
+                        panelRef.transaction((currentData) => {
+                            if (currentData === null) {
+                                return { totalCount: 0, totalTime: time };
+                            } else {
+                                currentData.totalTime = (currentData.totalTime || 0) + time;
+                                return currentData;
+                            }
+                        }).then(() => {
+                            // 更新個人時間
+                            userData[panel].time = time;
+                            localStorage.setItem('buddhaUserData', JSON.stringify(userData));
+                            
+                            // 清空輸入框
+                            timeInput.value = '';
+                            
+                            // 隱藏載入中
+                            loader.style.display = 'none';
+                            
+                            // 更新顯示
+                            updateDisplayedCounts();
+                            
+                            // 顯示提交成功提示
+                            alert(`已成功記錄 ${time} 分鐘念誦時間！`);
+                        }).catch(error => {
+                            console.error('提交失敗:', error);
+                            loader.style.display = 'none';
+                            alert('提交失敗，請稍後再試。若問題持續存在，請刷新頁面。');
+                            
+                            // 將失敗的數據添加到離線隊列
+                            let offlineQueue = JSON.parse(localStorage.getItem('buddhaOfflineQueue') || '[]');
+                            offlineQueue.push({
+                                panel: panel,
+                                type: 'time',
+                                value: time
+                            });
+                            localStorage.setItem('buddhaOfflineQueue', JSON.stringify(offlineQueue));
+                        });
                     } else {
                         alert('請輸入有效的念誦時間');
                     }
                 });
             });
+            
+            // 處理離線隊列的上傳
+            function processOfflineQueue() {
+                let offlineQueue = JSON.parse(localStorage.getItem('buddhaOfflineQueue') || '[]');
+                if (offlineQueue.length > 0) {
+                    // 檢查網絡連接
+                    if (navigator.onLine) {
+                        // 逐個處理隊列中的項目
+                        const item = offlineQueue[0];
+                        const panelRef = globalStatsRef.child(item.panel);
+                        
+                        panelRef.transaction((currentData) => {
+                            if (currentData === null) {
+                                if (item.type === 'count') {
+                                    return { totalCount: item.value, totalTime: 0 };
+                                } else {
+                                    return { totalCount: 0, totalTime: item.value };
+                                }
+                            } else {
+                                if (item.type === 'count') {
+                                    currentData.totalCount = (currentData.totalCount || 0) + item.value;
+                                } else {
+                                    currentData.totalTime = (currentData.totalTime || 0) + item.value;
+                                }
+                                return currentData;
+                            }
+                        }).then(() => {
+                            // 上傳成功，從隊列中移除
+                            offlineQueue.shift();
+                            localStorage.setItem('buddhaOfflineQueue', JSON.stringify(offlineQueue));
+                            
+                            // 如果還有項目，繼續處理
+                            if (offlineQueue.length > 0) {
+                                setTimeout(processOfflineQueue, 1000);
+                            }
+                        }).catch(error => {
+                            console.error('處理離線隊列時出錯:', error);
+                        });
+                    }
+                }
+            }
+            
+            // 網絡恢復時處理離線隊列
+            window.addEventListener('online', processOfflineQueue);
+            
+            // 定期檢查並處理離線隊列
+            setInterval(processOfflineQueue, 60000); // 每分鐘檢查一次
+            
+            // 頁面載入時立即嘗試處理離線隊列
+            processOfflineQueue();
+            
+            // 頁面載入時更新顯示
+            updateDisplayedCounts();
         });
     </script>
 </body>
