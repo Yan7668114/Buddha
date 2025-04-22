@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>共修 - 虛空學佛網</title>
+    <style>
+        :root {
+            --primary-color: #8a6d3b;
+            --secondary-color: #f8f5e6;
+            --accent-color: #d4af37;
+            --text-color: #333;
+            --light-text: #f8f5e6;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Noto Sans TC", "Microsoft YaHei", sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--secondary-color);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 20px 0;
+            position: relative;
+            background-image: url('/api/placeholder/1200/400');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+        }
+        
+        .header-overlay {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px 0;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .logo h1 {
+            font-size: 2.5rem;
+            letter-spacing: 2px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.3);
+            padding: 10px 0;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        nav li {
+            margin: 0 15px;
+        }
+        
+        nav a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 5px 10px;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+        }
+        
+        main {
+            padding: 40px 0;
+            min-height: calc(100vh - 200px);
+        }
+        
+        .page-title {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--primary-color);
+            font-size: 2rem;
+        }
+        
+        .scripture-layout {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 30px;
+            min-height: 600px;
+        }
+        
+        .sidebar {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        
+        .sidebar h3 {
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--accent-color);
+        }
+        
+        .scripture-menu {
+            list-style: none;
+        }
+        
+        .scripture-menu li {
+            margin-bottom: 15px;
+        }
+        
+        .scripture-menu a {
+            display: block;
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .scripture-menu a:hover,
+        .scripture-menu a.active {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            padding-left: 20px;
+        }
+        
+        .scripture-content {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            min-height: 600px;
+        }
+        
+        .scripture-title {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--accent-color);
+        }
+        
+        .scripture-translator {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .scripture-text {
+            line-height: 1.8;
+            white-space: pre-line;
+            text-align: justify;
+        }
+        
+        .scripture-placeholder {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 400px;
+            background-color: var(--secondary-color);
+            border-radius: 5px;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            font-style: italic;
+        }
+        
+        footer {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 20px 0;
+            text-align: center;
+        }
+        
+        .footer-content {
+            margin-bottom: 15px;
+        }
+        
+        .back-home {
+            display: inline-block;
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            padding: 8px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-top: 15px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .back-home:hover {
+            background-color: var(--text-color);
+            color: var(--light-text);
+            transform: translateY(-3px);
+        }
+        
+        /* 回到頂部按鈕的樣式 */
+        #backToTopBtn {
+            display: none; /* 初始隱藏按鈕 */
+            position: fixed; /* 固定位置 */
+            bottom: 20px; /* 距離底部20像素 */
+            right: 30px; /* 距離右側30像素 */
+            z-index: 99; /* 確保按鈕在其他元素上面 */
+            border: none; /* 移除邊框 */
+            outline: none; /* 移除焦點輪廓 */
+            background-color: var(--primary-color, #8a6d3b); /* 使用網站主色調 */
+            color: white; /* 白色文字 */
+            cursor: pointer; /* 滑鼠指針變為手形 */
+            padding: 15px; /* 內部填充 */
+            border-radius: 50%; /* 圓形按鈕 */
+            font-size: 18px; /* 文字大小 */
+            width: 50px; /* 按鈕寬度 */
+            height: 50px; /* 按鈕高度 */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2); /* 陰影效果 */
+            transition: all 0.3s ease; /* 平滑過渡效果 */
+        }
+
+        #backToTopBtn:hover {
+            background-color: var(--accent-color, #d4af37); /* 懸停時的背景色 */
+            transform: translateY(-3px); /* 懸停時輕微上浮效果 */
+        }
+
+        @media (max-width: 768px) {
+            .scripture-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .logo h1 {
+                font-size: 2rem;
+            }
+            
+            .page-title {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-overlay">
+            <div class="container">
+                <div class="logo">
+                    <h1>虛空學佛網</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">首頁</a></li>
+                        <li><a href="diamond-sutra.html">佛經選讀</a></li>
+                        <li><a href="#">常備咒語</a></li>
+                        <li><a href="#">人間佛教</a></li>
+                        <li><a href="group-meditation.html">共修</a></li>
+                        <li><a href="#">初學備忘錄</a></li>
+                        <li><a href="#">感應故事</a></li>
+                        <li><a href="#">線上問答</a></li>
+                        <li><a href="index.html#contact">聯繫我們</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <div class="container">
+            <h2 class="page-title">共修</h2>
+            
+            <div class="scripture-layout">
+                <div class="sidebar">
+                    <h3>選單</h3>
+                    <ul class="scripture-menu">
+                        <li><a href="#" class="scripture-link" data-scripture="diamond">娑婆世界一切眾生</a></li>
+                        <li><a href="#" class="scripture-link" data-scripture="lotus">十方世界一切地獄道、餓鬼道、畜生道的眾生</a></li>
+                        <li><a href="#" class="scripture-link" data-scripture="heart">十方世界一切墮胎、流產的嬰靈</a></li>
+                        <li><a href="#" class="scripture-link" data-scripture="ksitigarbha">一切眾生的婚姻</a></li>
+                    </ul>
+                </div>
+                
+		<div class="scripture-content">
+                    <div id="lotus-sutra" class="scripture-display" style="display: none;">
+                        <h3 class="scripture-title">妙法蓮華經</h3>
+                        <p class="scripture-translator">姚秦三藏法師鳩摩羅什譯</p>
+                        <div class="scripture-text">
+
+
+                        </div>
+                    </div>               
+
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 虛空學佛網 - 所有經文內容僅供學習參考</p>
+            </div>
+            <a href="index.html" class="back-home">返回主頁</a>
+        </div>
+    </footer>
+    
+    <button id="backToTopBtn" title="回到頂部">↑</button>
+
+    <script>
+        // 回到頂部功能
+document.addEventListener('DOMContentLoaded', function() {
+    // 獲取按鈕元素
+    const backToTopButton = document.getElementById('backToTopBtn');
+
+    // 當用戶滾動超過200像素時顯示按鈕
+    window.onscroll = function() {
+        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 200) {
+            backToTopButton.style.display = 'block';
+        } else {
+            backToTopButton.style.display = 'none';
+        }
+    };
+
+    // 點擊按鈕時滾動到頂部
+    backToTopButton.addEventListener('click', function() {
+        // 平滑滾動到頂部
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+});
+        // 處理經文切換
+        const scriptureLinks = document.querySelectorAll('.scripture-link');
+        const scriptureDisplays = document.querySelectorAll('.scripture-display');
+        
+        scriptureLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // 移除所有active class
+                scriptureLinks.forEach(l => l.classList.remove('active'));
+                scriptureDisplays.forEach(d => d.style.display = 'none');
+                
+                // 添加active class到當前點擊的鏈接
+                this.classList.add('active');
+                
+                // 顯示對應的經文
+                const scriptureId = this.getAttribute('data-scripture');
+                document.getElementById(`${scriptureId}-sutra`).style.display = 'block';
+            });
+        });
+        
+        // 平滑滾動
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId !== '#') {
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
