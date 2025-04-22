@@ -43,6 +43,24 @@
             background-position: center;
             background-blend-mode: overlay;
         }
+
+        .prayer-text {
+            background-color: rgba(138, 109, 59, 0.1);
+            border-left: 4px solid var(--primary-color);
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 0 5px 5px 0;
+            line-height: 1.8;
+        }
+        
+        .prayer-text p {
+            margin-bottom: 15px;
+        }
+        
+        .prayer-text p:last-child {
+            margin-bottom: 0;
+        }
+
         
         .header-overlay {
             background: rgba(0, 0, 0, 0.5);
@@ -156,38 +174,130 @@
             box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
             padding: 30px;
             min-height: 600px;
+            display: none;
         }
         
-        .scripture-title {
-            font-size: 1.8rem;
+        .scripture-content.active {
+            display: block;
+        }
+        
+        .buddha-name {
+            text-align: center;
+            font-size: 2.5rem;
             color: var(--primary-color);
-            margin-bottom: 10px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid var(--accent-color);
+            margin-bottom: 40px;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
         }
         
-        .scripture-translator {
-            font-style: italic;
-            color: #666;
+        .tools-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+            width: 100%;
+        }
+        
+        .tool-box {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 25px;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+        
+        .tool-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .tool-title {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 10px;
+        }
+        
+        .input-group {
             margin-bottom: 20px;
         }
         
-        .scripture-text {
-            line-height: 1.8;
-            white-space: pre-line;
-            text-align: justify;
+        .input-group input {
+            width: 80%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            text-align: center;
+            transition: all 0.3s ease;
         }
         
-        .scripture-placeholder {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 400px;
+        .input-group input:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+        }
+        
+        .submit-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-btn:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-3px);
+        }
+        
+        .stat-display {
+            margin-top: 20px;
+            padding: 15px;
             background-color: var(--secondary-color);
             border-radius: 5px;
-            color: var(--primary-color);
+            font-size: 1.1rem;
+        }
+        
+        .or-divider {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+            width: 100%;
+        }
+        
+        .or-circle {
+            width: 40px;
+            height: 40px;
+            background-color: var(--accent-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .personal-stats {
+            text-align: center;
+            background-color: var(--secondary-color);
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
             font-size: 1.2rem;
-            font-style: italic;
         }
         
         footer {
@@ -195,6 +305,7 @@
             color: var(--light-text);
             padding: 20px 0;
             text-align: center;
+            margin-top: 40px;
         }
         
         .footer-content {
@@ -257,6 +368,19 @@
             .page-title {
                 font-size: 1.7rem;
             }
+            
+            .tool-box {
+                width: 90%;
+                margin-bottom: 20px;
+            }
+            
+            .personal-stats {
+                width: 90%;
+            }
+            
+            .or-divider {
+                margin: 20px 0;
+            }
         }
     </style>
 </head>
@@ -292,23 +416,183 @@
                 <div class="sidebar">
                     <h3>選單</h3>
                     <ul class="scripture-menu">
-                        <li><a href="#" class="scripture-link" data-scripture="diamond">娑婆世界一切眾生</a></li>
-                        <li><a href="#" class="scripture-link" data-scripture="lotus">十方世界一切地獄道、餓鬼道、畜生道的眾生</a></li>
-                        <li><a href="#" class="scripture-link" data-scripture="heart">十方世界一切墮胎、流產的嬰靈</a></li>
-                        <li><a href="#" class="scripture-link" data-scripture="ksitigarbha">一切眾生的婚姻</a></li>
+                        <li><a href="#" class="scripture-link active" data-scripture="saha">娑婆世界一切眾生</a></li>
+                        <li><a href="#" class="scripture-link" data-scripture="hell">十方世界一切地獄道、餓鬼道、畜生道的眾生</a></li>
+                        <li><a href="#" class="scripture-link" data-scripture="infants">十方世界一切墮胎、流產的嬰靈</a></li>
+                        <li><a href="#" class="scripture-link" data-scripture="marriage">一切眾生的婚姻</a></li>
                     </ul>
                 </div>
                 
-		<div class="scripture-content">
-                    <div id="lotus-sutra" class="scripture-display" style="display: none;">
-                        <h3 class="scripture-title">妙法蓮華經</h3>
-                        <p class="scripture-translator">姚秦三藏法師鳩摩羅什譯</p>
-                        <div class="scripture-text">
+                <!-- 娑婆世界一切眾生面板 -->
+                <div id="saha-panel" class="scripture-content active">
+                    <h2 class="buddha-name">「阿彌陀佛」聖號</h2>
 
+                    <div class="prayer-text">
+                        <h3 class="scripture-title">迴向文</h3>
+                        <p>大慈大悲的阿彌陀佛。弟子以念誦您的聖號XX遍/XX分鐘的功德、福德，悉皆回向娑婆世界一切眾生。祈願您能夠轉化眾生心中的貪、瞋、癡，能夠賜予眾生更多念誦阿彌陀佛聖號的善緣，能夠光明遍照娑婆世界一切眾生，解脫一切眾生輪迴之苦，接引往生西方極樂世界。</p>
+                        <p>願以此功德，普及於一切，我等與眾生，皆共成佛道。</p>
+                        <p>願我臨欲命終時，盡除一切諸障礙，面見彼佛阿彌陀，即得往生安樂剎。</p>
+                    </div>
 
+                    <div class="tools-container">
+                        <div class="tool-box counter-tool">
+                            <h3 class="tool-title">計數器</h3>
+                            <div class="input-group">
+                                <input type="number" id="saha-count" min="1" placeholder="請輸入念誦次數" class="count-input">
+                            </div>
+                            <button class="submit-btn count-submit" data-panel="saha">送出</button>
+                            <div class="stat-display">
+                                目前累積次數: <span class="total-count" id="saha-total-count">0</span> 遍
+                            </div>
                         </div>
-                    </div>               
+                        
+                        <div class="or-divider">
+                            <div class="or-circle">或</div>
+                            <div class="personal-stats">
+                                您念了 <span class="personal-count" id="saha-personal-count">0</span> 遍 或 <span class="personal-time" id="saha-personal-time">0</span> 分鐘
+                            </div>
+                        </div>
+                        
+                        <div class="tool-box timer-tool">
+                            <h3 class="tool-title">計時器</h3>
+                            <div class="input-group">
+                                <input type="number" id="saha-time" min="1" placeholder="請輸入念誦分鐘數" class="time-input">
+                            </div>
+                            <button class="submit-btn time-submit" data-panel="saha">送出</button>
+                            <div class="stat-display">
+                                目前累積時間: <span class="total-time" id="saha-total-time">0</span> 分鐘
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 十方世界一切地獄道、餓鬼道、畜生道的眾生面板 -->
+                <div id="hell-panel" class="scripture-content">
+                    <h2 class="buddha-name">「阿彌陀佛」聖號</h2>
+                    
+                    <div class="prayer-text">
+                        <h3 class="scripture-title">迴向文</h3>
+                        <p>大慈大悲的阿彌陀佛。弟子以念誦您的聖號XX遍/XX分鐘的功德、福德，悉皆回向十方世界一切地獄道、餓鬼道、畜生道的眾生。祈願您能夠轉化眾生心中的貪、瞋、癡，能夠轉化三惡道眾生的惡業，能夠光明遍照十方世界一切地獄、餓鬼、畜生，令三惡道眾生消除業障、解脫輪迴之苦，能夠接引三惡道眾生往生西方極樂世界。</p>
+                        <p>願以此功德，普及於一切，我等與眾生，皆共成佛道。</p>
+                        <p>願我臨欲命終時，盡除一切諸障礙，面見彼佛阿彌陀，即得往生安樂剎。</p>
+                    </div>
+                    
+                    <div class="tools-container">
+                        <div class="tool-box counter-tool">
+                            <h3 class="tool-title">計數器</h3>
+                            <div class="input-group">
+                                <input type="number" id="hell-count" min="1" placeholder="請輸入念誦次數" class="count-input">
+                            </div>
+                            <button class="submit-btn count-submit" data-panel="hell">送出</button>
+                            <div class="stat-display">
+                                目前累積次數: <span class="total-count" id="hell-total-count">0</span> 遍
+                            </div>
+                        </div>
+                        
+                        <div class="or-divider">
+                            <div class="or-circle">或</div>
+                            <div class="personal-stats">
+                                您念了 <span class="personal-count" id="hell-personal-count">0</span> 遍 或 <span class="personal-time" id="hell-personal-time">0</span> 分鐘
+                            </div>
+                        </div>
+                        
+                        <div class="tool-box timer-tool">
+                            <h3 class="tool-title">計時器</h3>
+                            <div class="input-group">
+                                <input type="number" id="hell-time" min="1" placeholder="請輸入念誦分鐘數" class="time-input">
+                            </div>
+                            <button class="submit-btn time-submit" data-panel="hell">送出</button>
+                            <div class="stat-display">
+                                目前累積時間: <span class="total-time" id="hell-total-time">0</span> 分鐘
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 十方世界一切墮胎、流產的嬰靈面板 -->
+                <div id="infants-panel" class="scripture-content">
+                    <h2 class="buddha-name">「阿彌陀佛」聖號</h2>
 
+                    <div class="prayer-text">
+                        <h3 class="scripture-title">迴向文</h3>
+                        <p>大慈大悲的阿彌陀佛。弟子以念誦您的聖號XX遍/XX分鐘的功德、福德，悉皆回向十方世界一切墮胎、流產的嬰靈。祈願您能夠轉化嬰靈心中的貪、瞋、癡，能夠轉化嬰靈心中的瞋恨，能夠光明遍照十方世界一切嬰靈，令他們消除業障、解脫輪迴之苦，能夠往生西方極樂世界。</p>
+                        <p>願以此功德，普及於一切，我等與眾生，皆共成佛道。</p>
+                        <p>願我臨欲命終時，盡除一切諸障礙，面見彼佛阿彌陀，即得往生安樂剎。</p>
+                    </div>
+
+                    <div class="tools-container">
+                        <div class="tool-box counter-tool">
+                            <h3 class="tool-title">計數器</h3>
+                            <div class="input-group">
+                                <input type="number" id="infants-count" min="1" placeholder="請輸入念誦次數" class="count-input">
+                            </div>
+                            <button class="submit-btn count-submit" data-panel="infants">送出</button>
+                            <div class="stat-display">
+                                目前累積次數: <span class="total-count" id="infants-total-count">0</span> 遍
+                            </div>
+                        </div>
+                        
+                        <div class="or-divider">
+                            <div class="or-circle">或</div>
+                            <div class="personal-stats">
+                                您念了 <span class="personal-count" id="infants-personal-count">0</span> 遍 或 <span class="personal-time" id="infants-personal-time">0</span> 分鐘
+                            </div>
+                        </div>
+                        
+                        <div class="tool-box timer-tool">
+                            <h3 class="tool-title">計時器</h3>
+                            <div class="input-group">
+                                <input type="number" id="infants-time" min="1" placeholder="請輸入念誦分鐘數" class="time-input">
+                            </div>
+                            <button class="submit-btn time-submit" data-panel="infants">送出</button>
+                            <div class="stat-display">
+                                目前累積時間: <span class="total-time" id="infants-total-time">0</span> 分鐘
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 一切眾生的婚姻面板 -->
+                <div id="marriage-panel" class="scripture-content">
+                    <h2 class="buddha-name">「觀世音菩薩」聖號</h2>
+                    
+                    <div class="prayer-text">
+                        <h3 class="scripture-title">迴向文</h3>
+                        <p>大慈大悲的觀世音菩薩。弟子以念誦您的聖號XX遍/XX分鐘的功德、福德，悉皆回向祈願十方世界一切眾生的婚姻都能夠得到善緣，能夠順利圓滿。</p>
+                        <p>願以此功德，普及於一切，我等與眾生，皆共成佛道。</p>
+                        <p>願我臨欲命終時，盡除一切諸障礙，面見彼佛阿彌陀，即得往生安樂剎。</p>
+                    </div>
+
+                    <div class="tools-container">
+                        <div class="tool-box counter-tool">
+                            <h3 class="tool-title">計數器</h3>
+                            <div class="input-group">
+                                <input type="number" id="marriage-count" min="1" placeholder="請輸入念誦次數" class="count-input">
+                            </div>
+                            <button class="submit-btn count-submit" data-panel="marriage">送出</button>
+                            <div class="stat-display">
+                                目前累積次數: <span class="total-count" id="marriage-total-count">0</span> 遍
+                            </div>
+                        </div>
+                        
+                        <div class="or-divider">
+                            <div class="or-circle">或</div>
+                            <div class="personal-stats">
+                                您念了 <span class="personal-count" id="marriage-personal-count">0</span> 遍 或 <span class="personal-time" id="marriage-personal-time">0</span> 分鐘
+                            </div>
+                        </div>
+                        
+                        <div class="tool-box timer-tool">
+                            <h3 class="tool-title">計時器</h3>
+                            <div class="input-group">
+                                <input type="number" id="marriage-time" min="1" placeholder="請輸入念誦分鐘數" class="time-input">
+                            </div>
+                            <button class="submit-btn time-submit" data-panel="marriage">送出</button>
+                            <div class="stat-display">
+                                目前累積時間: <span class="total-time" id="marriage-total-time">0</span> 分鐘
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -327,65 +611,120 @@
 
     <script>
         // 回到頂部功能
-document.addEventListener('DOMContentLoaded', function() {
-    // 獲取按鈕元素
-    const backToTopButton = document.getElementById('backToTopBtn');
+        document.addEventListener('DOMContentLoaded', function() {
+            // 獲取按鈕元素
+            const backToTopButton = document.getElementById('backToTopBtn');
 
-    // 當用戶滾動超過200像素時顯示按鈕
-    window.onscroll = function() {
-        if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 200) {
-            backToTopButton.style.display = 'block';
-        } else {
-            backToTopButton.style.display = 'none';
-        }
-    };
-
-    // 點擊按鈕時滾動到頂部
-    backToTopButton.addEventListener('click', function() {
-        // 平滑滾動到頂部
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    });
-});
-        // 處理經文切換
-        const scriptureLinks = document.querySelectorAll('.scripture-link');
-        const scriptureDisplays = document.querySelectorAll('.scripture-display');
-        
-        scriptureLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                // 移除所有active class
-                scriptureLinks.forEach(l => l.classList.remove('active'));
-                scriptureDisplays.forEach(d => d.style.display = 'none');
-                
-                // 添加active class到當前點擊的鏈接
-                this.classList.add('active');
-                
-                // 顯示對應的經文
-                const scriptureId = this.getAttribute('data-scripture');
-                document.getElementById(`${scriptureId}-sutra`).style.display = 'block';
-            });
-        });
-        
-        // 平滑滾動
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if (targetId !== '#') {
-                    const targetElement = document.querySelector(targetId);
-                    
-                    if (targetElement) {
-                        window.scrollTo({
-                            top: targetElement.offsetTop - 80,
-                            behavior: 'smooth'
-                        });
-                    }
+            // 當用戶滾動超過200像素時顯示按鈕
+            window.onscroll = function() {
+                if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 200) {
+                    backToTopButton.style.display = 'block';
+                } else {
+                    backToTopButton.style.display = 'none';
                 }
+            };
+
+            // 點擊按鈕時滾動到頂部
+            backToTopButton.addEventListener('click', function() {
+                // 平滑滾動到頂部
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+            
+            // 處理經文切換
+            const scriptureLinks = document.querySelectorAll('.scripture-link');
+            const scripturePanels = document.querySelectorAll('.scripture-content');
+            
+            scriptureLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // 移除所有active class
+                    scriptureLinks.forEach(l => l.classList.remove('active'));
+                    scripturePanels.forEach(p => p.classList.remove('active'));
+                    
+                    // 添加active class到當前點擊的鏈接
+                    this.classList.add('active');
+                    
+                    // 顯示對應的面板
+                    const scriptureId = this.getAttribute('data-scripture');
+                    document.getElementById(`${scriptureId}-panel`).classList.add('active');
+                });
+            });
+            
+            // 模擬數據儲存
+            // 實際應用中這些數據應該存儲在服務器上的數據庫中
+            const globalData = {
+                saha: { totalCount: 0, totalTime: 0 },
+                hell: { totalCount: 0, totalTime: 0 },
+                infants: { totalCount: 0, totalTime: 0 },
+                marriage: { totalCount: 0, totalTime: 0 }
+            };
+            
+            // 用戶個人數據
+            const userData = {
+                saha: { count: 0, time: 0 },
+                hell: { count: 0, time: 0 },
+                infants: { count: 0, time: 0 },
+                marriage: { count: 0, time: 0 }
+            };
+            
+            // 處理計數器提交
+            const countSubmitBtns = document.querySelectorAll('.count-submit');
+            countSubmitBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const panel = this.getAttribute('data-panel');
+                    const countInput = document.getElementById(`${panel}-count`);
+                    const count = parseInt(countInput.value) || 0;
+                    
+                    if (count > 0) {
+                        // 更新全局計數
+                        globalData[panel].totalCount += count;
+                        document.getElementById(`${panel}-total-count`).textContent = globalData[panel].totalCount;
+                        
+                        // 更新用戶個人計數
+                        userData[panel].count = count;
+                        document.getElementById(`${panel}-personal-count`).textContent = userData[panel].count;
+                        
+                        // 清空輸入框
+                        countInput.value = '';
+                        
+                        // 顯示提交成功提示
+                        alert(`已成功記錄 ${count} 遍念誦！`);
+                    } else {
+                        alert('請輸入有效的念誦次數');
+                    }
+                });
+            });
+            
+            // 處理計時器提交
+            const timeSubmitBtns = document.querySelectorAll('.time-submit');
+            timeSubmitBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const panel = this.getAttribute('data-panel');
+                    const timeInput = document.getElementById(`${panel}-time`);
+                    const time = parseInt(timeInput.value) || 0;
+                    
+                    if (time > 0) {
+                        // 更新全局時間
+                        globalData[panel].totalTime += time;
+                        document.getElementById(`${panel}-total-time`).textContent = globalData[panel].totalTime;
+                        
+                        // 更新用戶個人時間
+                        userData[panel].time = time;
+                        document.getElementById(`${panel}-personal-time`).textContent = userData[panel].time;
+                        
+                        // 清空輸入框
+                        timeInput.value = '';
+                        
+                        // 顯示提交成功提示
+                        alert(`已成功記錄 ${time} 分鐘念誦時間！`);
+                    } else {
+                        alert('請輸入有效的念誦時間');
+                    }
+                });
             });
         });
     </script>
