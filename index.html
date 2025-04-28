@@ -516,6 +516,11 @@
                 }
             }
         }
+        
+        firebase.database().setPersistenceEnabled(true);
+        
+        const statsRef = firebase.database().ref('共修網/global_stats');
+        statsRef.keepSynced(true);
     </script>
 </body>
 </html>
