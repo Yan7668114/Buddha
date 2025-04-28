@@ -1,0 +1,12 @@
+{
+  "name": "虛空學佛網",
+  "short_name": "虛空學佛",
+  "description": "佛學資源和學習平台",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#f8f5e6",
+  "theme_color": "#8a6d3b",
+  "orientation": "portrait-primary",
+  "scope": "./",
+  "lang": "zh-TW"
+} 

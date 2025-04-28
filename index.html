@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>虛空學佛網</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#8a6d3b">
+    <link rel="apple-touch-icon" href="images/icons/icon-192x192.png">
     <style>
         :root {
             --primary-color: #8a6d3b;
@@ -433,6 +436,10 @@
         </div>
     </footer>
     
+    <div id="offline-message" style="display: none; position: fixed; bottom: 70px; right: 20px; background-color: var(--primary-color); color: var(--light-text); padding: 10px 20px; border-radius: 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); z-index: 100;">
+        您目前處於離線模式
+    </div>
+    
     <!-- 回到頂部按鈕 -->
     <button id="backToTopBtn" title="回到頂部">↑</button>
     
@@ -478,6 +485,37 @@
                 });
             });
         });
+        
+        // 註冊 Service Worker 以實現離線功能
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(registration => {
+                        console.log('Service Worker 註冊成功:', registration);
+                    })
+                    .catch(error => {
+                        console.log('Service Worker 註冊失敗:', error);
+                    });
+            });
+            
+            // 監聽在線/離線狀態變化
+            window.addEventListener('online', updateOnlineStatus);
+            window.addEventListener('offline', updateOnlineStatus);
+            
+            // 頁面加載時檢查在線狀態
+            document.addEventListener('DOMContentLoaded', function() {
+                updateOnlineStatus();
+            });
+            
+            function updateOnlineStatus() {
+                const offlineMessage = document.getElementById('offline-message');
+                if (navigator.onLine) {
+                    offlineMessage.style.display = 'none';
+                } else {
+                    offlineMessage.style.display = 'block';
+                }
+            }
+        }
     </script>
 </body>
 </html>

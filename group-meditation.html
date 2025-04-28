@@ -638,6 +638,14 @@
     
     <button id="backToTopBtn" title="回到頂部">↑</button>
 
+    <div class="user-data" style="display: none;">
+      <!-- 通過 JavaScript 動態填充內容 -->
+    </div>
+
+    <div class="offline-queue" style="display: none;">
+      <!-- 通過 JavaScript 動態填充內容 -->
+    </div>
+
     <script>
         // 在這裡填入您的Firebase配置
         const firebaseConfig = {
@@ -931,6 +939,64 @@
             
             // 頁面載入時更新顯示
             updateDisplayedCounts();
+
+            // Firebase 初始化後添加離線持久化設置
+            firebase.database().setPersistenceEnabled(true).then(() => {
+                console.log('Firebase 離線持久化已啟用');
+            }).catch(error => {
+                console.log('Firebase 離線持久化啟用失敗:', error);
+            });
+
+            // 為關鍵數據啟用離線保存
+            const sahaStatsRef = db.ref('共修網/global_stats/saha');
+            sahaStatsRef.keepSynced(true);
+            const hellStatsRef = db.ref('共修網/global_stats/hell');
+            hellStatsRef.keepSynced(true);
+            const infantsStatsRef = db.ref('共修網/global_stats/infants');
+            infantsStatsRef.keepSynced(true);
+            const marriageStatsRef = db.ref('共修網/global_stats/marriage');
+            marriageStatsRef.keepSynced(true);
+
+            // 檢查並顯示用戶的共修記錄
+            const userData = JSON.parse(localStorage.getItem('buddhaUserData') || '{}');
+            const userDataSection = document.querySelector('.user-data');
+            
+            if (userData && Object.keys(userData).length > 0) {
+                let html = '<h3>您的共修記錄</h3><ul>';
+                
+                // 遍歷用戶數據生成顯示內容
+                for (const category in userData) {
+                    if (userData[category].count > 0 || userData[category].time > 0) {
+                        let categoryName = '';
+                        switch(category) {
+                            case 'saha': categoryName = '娑婆世界一切眾生'; break;
+                            case 'hell': categoryName = '十方世界一切地獄道、餓鬼道、畜生道的眾生'; break;
+                            case 'infants': categoryName = '十方世界一切墮胎、流產的嬰靈'; break;
+                            case 'marriage': categoryName = '一切眾生的婚姻'; break;
+                            default: categoryName = category;
+                        }
+                        
+                        html += `<li>${categoryName}: ${userData[category].count || 0} 遍，${userData[category].time || 0} 分鐘</li>`;
+                    }
+                }
+                
+                html += '</ul>';
+                userDataSection.innerHTML = html;
+                userDataSection.style.display = 'block';
+            } else {
+                userDataSection.style.display = 'none';
+            }
+            
+            // 檢查離線隊列
+            const offlineQueue = JSON.parse(localStorage.getItem('buddhaOfflineQueue') || '[]');
+            const offlineQueueSection = document.querySelector('.offline-queue');
+            
+            if (offlineQueue.length > 0) {
+                offlineQueueSection.innerHTML = `<h3>待同步數據</h3><p>您有 ${offlineQueue.length} 條記錄等待連接恢復後同步</p>`;
+                offlineQueueSection.style.display = 'block';
+            } else {
+                offlineQueueSection.style.display = 'none';
+            }
         });
     </script>
 </body>
